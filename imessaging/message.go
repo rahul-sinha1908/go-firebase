@@ -36,3 +36,23 @@ func SendMessage(notification messaging.Notification, data map[string]string, re
 
 	return response, err
 }
+
+//SubscribeToTopic Subscribe to topic
+func SubscribeToTopic(topicName string, firebaseTokens []string) (*messaging.TopicManagementResponse, error) {
+	client, err := getMessagingContext()
+	if err != nil {
+		return nil, err
+	}
+
+	return client.SubscribeToTopic(context.Background(), firebaseTokens, topicName)
+}
+
+//UnsubscribeFromTopic Subscribe to topic
+func UnsubscribeFromTopic(topicName string, firebaseTokens []string) (*messaging.TopicManagementResponse, error) {
+	client, err := getMessagingContext()
+	if err != nil {
+		return nil, err
+	}
+
+	return client.UnsubscribeFromTopic(context.Background(), firebaseTokens, topicName)
+}
