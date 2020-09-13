@@ -37,6 +37,24 @@ func SendMessage(notification messaging.Notification, data map[string]string, re
 	return response, err
 }
 
+//SendTopicMessage Send Message to a topic
+func SendTopicMessage(notification messaging.Notification, data map[string]string, topicName string) (string, error) {
+	client, err := getMessagingContext()
+	if err != nil {
+		return "", err
+	}
+
+	message := &messaging.Message{
+		Data:         data,
+		Notification: &notification,
+		Topic:        topicName,
+	}
+
+	response, err := client.Send(context.Background(), message)
+
+	return response, err
+}
+
 //SubscribeToTopic Subscribe to topic
 func SubscribeToTopic(topicName string, firebaseTokens []string) (*messaging.TopicManagementResponse, error) {
 	client, err := getMessagingContext()
