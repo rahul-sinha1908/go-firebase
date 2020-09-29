@@ -37,6 +37,23 @@ func SendMessage(notification messaging.Notification, data map[string]string, re
 	return response, err
 }
 
+//SendData Send Only data and no notification
+func SendData(data map[string]string, registrationTokens []string) (*messaging.BatchResponse, error) {
+	client, err := getMessagingContext()
+	if err != nil {
+		return nil, err
+	}
+
+	message := &messaging.MulticastMessage{
+		Data:   data,
+		Tokens: registrationTokens,
+	}
+
+	response, err := client.SendMulticast(context.Background(), message)
+
+	return response, err
+}
+
 //SendTopicMessage Send Message to a topic
 func SendTopicMessage(notification messaging.Notification, data map[string]string, topicName string) (string, error) {
 	client, err := getMessagingContext()
