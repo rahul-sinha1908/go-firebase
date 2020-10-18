@@ -19,55 +19,26 @@ func getMessagingContext() (*messaging.Client, error) {
 	return client, err
 }
 
-//SendMessage Send Message
-func SendMessage(notification messaging.Notification, data map[string]string, registrationTokens []string) (*messaging.BatchResponse, error) {
+//SendMulticastMessage Send Message
+func SendMulticastMessage(message messaging.MulticastMessage) (*messaging.BatchResponse, error) {
 	client, err := getMessagingContext()
 	if err != nil {
 		return nil, err
 	}
 
-	message := &messaging.MulticastMessage{
-		Data:         data,
-		Notification: &notification,
-		Tokens:       registrationTokens,
-	}
-
-	response, err := client.SendMulticast(context.Background(), message)
+	response, err := client.SendMulticast(context.Background(), &message)
 
 	return response, err
 }
 
-//SendData Send Only data and no notification
-func SendData(data map[string]string, registrationTokens []string) (*messaging.BatchResponse, error) {
-	client, err := getMessagingContext()
-	if err != nil {
-		return nil, err
-	}
-
-	message := &messaging.MulticastMessage{
-		Data:   data,
-		Tokens: registrationTokens,
-	}
-
-	response, err := client.SendMulticast(context.Background(), message)
-
-	return response, err
-}
-
-//SendTopicMessage Send Message to a topic
-func SendTopicMessage(notification messaging.Notification, data map[string]string, topicName string) (string, error) {
+//SendMessage Send Message to a topic
+func SendMessage(message messaging.Message) (string, error) {
 	client, err := getMessagingContext()
 	if err != nil {
 		return "", err
 	}
 
-	message := &messaging.Message{
-		Data:         data,
-		Notification: &notification,
-		Topic:        topicName,
-	}
-
-	response, err := client.Send(context.Background(), message)
+	response, err := client.Send(context.Background(), &message)
 
 	return response, err
 }
